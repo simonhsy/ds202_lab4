@@ -1,0 +1,49 @@
+---
+title: "ds202_lab4"
+author: "Hongsheng Yin"
+date: "March 14, 2019"
+output: html_document
+---
+
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyr)
+defClean <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
+offClean <- read_excel('cyclonesFootball2018.xlsx', sheet='Offensive')
+bioClean <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
+
+defClean$Name <- as.factor(defClean$Name)
+defClean$Opponent_Opponent <- as.factor(defClean$Opponent_Opponent)
+offClean$Name <- as.factor(offClean$Name)
+offClean$Opponent_Opponent <- as.factor(offClean$Opponent_Opponent)
+bioClean$Name <- as.factor(bioClean$Name)
+
+defClean <- defClean %>% mutate(
+  Tackles_Solo = as.numeric(Tackles_Solo), Tackles_ASST = as.numeric(Tackles_ASST),
+  Tackles_TFL = as.numeric(Tackles_TFL), Tackles_Sack = as.numeric(Tackles_Sack),
+  Turnover_FF = as.numeric(Turnover_FF), Turnover_FR = as.numeric(Turnover_FR),
+  Turnover_INT = as.numeric(Turnover_INT), Pass_QBH = as.numeric(Pass_QBH),
+  Pass_PB = as.numeric(Pass_PB)
+)
+
+offClean <- offClean %>% mutate(
+  Receiving_REC = as.numeric(Receiving_REC), Receiving_YDS = as.numeric(Receiving_YDS),
+  Receiving_TD  = as.numeric(Receiving_TD), Rushing_ATT = suppressWarnings(as.numeric(Rushing_ATT)),
+  Rushing_YDS = suppressWarnings(as.numeric(Rushing_YDS)), Rushing_TD = suppressWarnings(as.numeric(Rushing_TD)),
+  `Passing_CMP-ATT` = suppressWarnings(as.numeric(`Passing_CMP-ATT`)), 
+  Passing_YDS = suppressWarnings(as.numeric(Passing_YDS)),
+  Passing_TD  = suppressWarnings(as.numeric(Passing_TD)), Passing_INT = suppressWarnings(as.numeric(Passing_INT))
+)
+
+bioClean <- bioClean %>% mutate(
+  Weight = as.numeric(Weight)
+)
+
+str(defClean)
+str(offClean)
+str(bioClean)
+
+
+
+```
