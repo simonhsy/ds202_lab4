@@ -1,0 +1,103 @@
+---
+title: "team"
+author: "Zihao Han;Hongsheng Yin"
+date: "March 27, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyr)
+defClean <- read_excel('C://Users//h8438//DSProject//ds202_lab4//cyclonesFootball2018.xlsx', sheet='Defensive')
+offClean <- read_excel('C://Users//h8438//DSProject//ds202_lab4//cyclonesFootball2018.xlsx', sheet='Offensive')
+bioClean <- read_excel('C://Users//h8438//DSProject//ds202_lab4//cyclonesFootball2018.xlsx', sheet='Biography')
+defClean$Name <- as.factor(defClean$Name)
+defClean$Opponent_Opponent <- as.factor(defClean$Opponent_Opponent)
+offClean$Name <- as.factor(offClean$Name)
+offClean$Opponent_Opponent <- as.factor(offClean$Opponent_Opponent)
+bioClean$Name <- as.factor(bioClean$Name)
+defClean <- defClean %>% mutate(
+  Tackles_Solo = as.numeric(Tackles_Solo), Tackles_ASST = as.numeric(Tackles_ASST),
+  Tackles_TFL = as.numeric(Tackles_TFL), Tackles_Sack = as.numeric(Tackles_Sack),
+  Turnover_FF = as.numeric(Turnover_FF), Turnover_FR = as.numeric(Turnover_FR),
+  Turnover_INT = as.numeric(Turnover_INT), Pass_QBH = as.numeric(Pass_QBH),
+  Pass_PB = as.numeric(Pass_PB)
+)
+offClean <- offClean %>% mutate(
+  Receiving_REC = as.numeric(Receiving_REC), Receiving_YDS = as.numeric(Receiving_YDS),
+  Receiving_TD  = as.numeric(Receiving_TD), Rushing_ATT = suppressWarnings(as.numeric(Rushing_ATT)),
+  Rushing_YDS = suppressWarnings(as.numeric(Rushing_YDS)), Rushing_TD = suppressWarnings(as.numeric(Rushing_TD)),
+  `Passing_CMP-ATT` = suppressWarnings(as.numeric(`Passing_CMP-ATT`)), 
+  Passing_YDS = suppressWarnings(as.numeric(Passing_YDS)),
+  Passing_TD  = suppressWarnings(as.numeric(Passing_TD)), Passing_INT = suppressWarnings(as.numeric(Passing_INT))
+)
+bioClean <- bioClean %>% mutate(
+  Weight = as.numeric(Weight)
+)
+str(defClean)
+defClean
+str(offClean)
+str(bioClean)
+```
+#Part 2
+##1
+```{r}
+
+defClean%>% gather(key = "Statistic",value = "count",3:11)
+defClean<-defClean%>% gather(key = "Statistic",value = "count",3:11)
+str(defClean)
+defClean
+```
+##2
+```{r}
+
+library(ggplot2)
+ggplot(defClean,aes(x=count))+geom_histogram()+facet_wrap(~Statistic,scales="free_x")
+
+```
+#### according to the graph, the take Turnover_FF, Turnover_FR, Turnover_INT is rare since their count is a few (only have 1 and the bar is low).
+
+##3
+```{r}
+defClean%>% filter(Statistic=="Tackles_Solo",Opponent_Opponent%in%c("West Virginia","Kansas State"))%>%
+   spread(Opponent_Opponent,count)%>%ggplot(aes(x=`West Virginia`,y=`Kansas State`))+geom_point()
+
+
+defClean %>% spread(Statistic,count)%>%
+   select(Name,Tackles_Solo,Opponent_Opponent)%>%
+  filter(Opponent_Opponent%in%c("West Virginia","Kansas State"))%>%
+  spread(Opponent_Opponent,Tackles_Solo)%>%
+  ggplot(aes(x=`West Virginia`,y=`Kansas State`))+geom_point()
+
+
+```
+#### No, the number shows that in the scatterplot ,`Kansas State` get higher number( highter score) than `West Virginia`.
+
+
+##4
+```{r}
+bioClean%>%separate(Hometown,into=c("City","State"), ",")
+```
+
+##5
+```{r}
+bioClean%>%separate(Hometown,into=c("City","State"),",")%>%count(State)%>%group_by(State)
+```
+#Part 3
+##1
+```{r}
+full_join(offClean,bioClean)
+```
+##2
+```{r}
+full_join(offClean,bioClean)%>%ggplot(aes(x=Weight,y=Receiving_YDS))+geom_point()
+```
+#### THere is no relationship. In the graph only pople has 225 weight have higher Receiving_YDS score, outher weight have no sepcific relation.
+
+##3
