@@ -203,9 +203,9 @@ library(dplyr)</code></pre>
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
 <pre class="r"><code>library(tidyr)
-defClean &lt;- read_excel('C://Users//h8438//DSProject//ds202_lab4//cyclonesFootball2018.xlsx', sheet='Defensive')
-offClean &lt;- read_excel('C://Users//h8438//DSProject//ds202_lab4//cyclonesFootball2018.xlsx', sheet='Offensive')
-bioClean &lt;- read_excel('C://Users//h8438//DSProject//ds202_lab4//cyclonesFootball2018.xlsx', sheet='Biography')
+defClean &lt;- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
+offClean &lt;- read_excel('cyclonesFootball2018.xlsx', sheet='Offensive')
+bioClean &lt;- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
 defClean$Name &lt;- as.factor(defClean$Name)
 defClean$Opponent_Opponent &lt;- as.factor(defClean$Opponent_Opponent)
 offClean$Name &lt;- as.factor(offClean$Name)
