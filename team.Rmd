@@ -98,6 +98,12 @@ full_join(offClean,bioClean)
 ```{r}
 full_join(offClean,bioClean)%>%ggplot(aes(x=Weight,y=Receiving_YDS))+geom_point()
 ```
-#### THere is no relationship. In the graph only pople has 225 weight have higher Receiving_YDS score, outher weight have no sepcific relation.
+#### There is no relationship. In the graph only pople has 225 weight have higher Receiving_YDS score, outher weight have no sepcific relation.
 
-##3
+##3 Is there any relaton between players weight and their solo tackles.
+```{r}
+full_join(defClean,bioClean)%>% filter(Statistic=="Tackles_Solo")%>%ggplot(aes(x=Weight,y=count))+geom_point()
+
+```
+####yes,players who have heigh weight will have less solo tackles. the relation was increased at start for a bit(less than 180weight) then decreasing(after 200 weight). players who have nearly 180-200 weight have heighest solo tackles.
+
